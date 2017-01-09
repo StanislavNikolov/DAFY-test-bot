@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 	clock_t lastSend = clock();
 	int netID, x = MIN_X, y = yDist(eng);
 	int xStep = 4;
+	bool gotID = false;
 
 	while(true)
 	{
@@ -41,12 +42,15 @@ int main(int argc, char** argv)
 			SDLNet_TCP_Send(sock, info, 20);
 		}
 
-		int active = SDLNet_CheckSockets(chkNet, 0);
-		int recv[1000];
-		if(active > 0)
-		{
-			SDLNet_TCP_Recv(sock, recv, 1000);
-			netID = recv[0];
+		if(!gotID) {
+			int active = SDLNet_CheckSockets(chkNet, 0);
+			int recv[1000];
+			if(active > 0)
+			{
+				SDLNet_TCP_Recv(sock, recv, 1000);
+				netID = recv[0];
+				gotID = true;
+			}
 		}
 	}
 }
