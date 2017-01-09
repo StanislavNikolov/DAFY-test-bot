@@ -37,8 +37,10 @@ int main(int argc, char** argv)
 		if(active > 0)
 		{
 			SDLNet_TCP_Recv(sock, recv, 1000);
-			netID = recv[0];
-			break;
+			if(recv[0] == 1) {
+				netID = recv[1];
+				break;
+			}
 		}
 		usleep(CLOCKS_PER_SEC / 5); // try 5 times a second to get an id
 	}
@@ -58,7 +60,7 @@ int main(int argc, char** argv)
 		 * if the prev operation took 20 ms to complete, and we want the next one to begin 35 after
 		 * the prev started, we need to sleep 35 - timetocomplete = 15 ms
 		 */
-		time_t sleep = CLOCKS_PER_SEC / 30 - (curr - prev);
+		time_t sleep = CLOCKS_PER_SEC / 100 - (curr - prev);
 		if(sleep > 0) {
 			usleep(sleep);
 		} else {
